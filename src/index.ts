@@ -1,6 +1,5 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { getConfig } from './config.js';
 import { registerInsightTools } from './tools/insights.js';
 import { registerWinnerTools } from './tools/winners.js';
 import { registerCreativeTools } from './tools/creatives.js';
@@ -8,20 +7,20 @@ import { registerAdCopyTools } from './tools/ad-copy.js';
 import { registerAdTools } from './tools/ads.js';
 import { registerCampaignTools } from './tools/campaigns.js';
 import { registerAdSetTools } from './tools/adsets.js';
-
-// Validate config at startup
-try {
-  getConfig();
-} catch (error) {
-  console.error(error instanceof Error ? error.message : 'Configuration error');
-  process.exit(1);
-}
+import { registerAccountTools } from './tools/accounts.js';
 
 const server = new McpServer({
   name: 'meta-ads',
   version: '1.0.0',
 }, {
-  instructions: `Meta Ads MCP Server — Full lifecycle management of Meta (Facebook/Instagram) ads.
+  instructions: `Meta Ads MCP Server — Full lifecycle management of Meta (Facebook/Instagram) ads across multiple client accounts.
+
+## Account Management (start here)
+1. list_accounts — see all configured clients, which is active
+2. switch_account — activate a different client (all API calls then use that account)
+3. add_account — onboard a new client with their credentials
+4. current_account — confirm which account is active
+5. remove_account — remove a client from the config
 
 ## Quick Start
 1. list_campaigns — see what's running
@@ -79,6 +78,7 @@ LEARN_MORE
 });
 
 // Register all tools
+registerAccountTools(server);
 registerInsightTools(server);
 registerWinnerTools(server);
 registerCreativeTools(server);

@@ -1,0 +1,22 @@
+{
+  "clients": {
+    "client-slug": {
+      "name": "Client Display Name",
+      "accessToken": "your_meta_system_user_access_token",
+      "adAccountId": "act_your_ad_account_id",
+      "appSecret": "your_meta_app_secret",
+      "pageId": "your_facebook_page_id",
+      "pixelId": "your_meta_pixel_id",
+      "apiVersion": "v24.0"
+    },
+    "another-client": {
+      "name": "Another Client",
+      "accessToken": "their_access_token",
+      "adAccountId": "act_their_ad_account_id",
+      "appSecret": "their_app_secret",
+      "pageId": "their_page_id",
+      "pixelId": "their_pixel_id",
+      "apiVersion": "v24.0"
+    }
+  }
+}

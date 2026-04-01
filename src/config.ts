@@ -1,28 +1,39 @@
 import { config } from 'dotenv';
 import { z } from 'zod';
+import { getActiveClient } from './lib/client-manager.js';
 
 config();
 
-const configSchema = z.object({
-  META_ACCESS_TOKEN: z.string().min(1, 'META_ACCESS_TOKEN is required'),
-  META_AD_ACCOUNT_ID: z.string().min(1, 'META_AD_ACCOUNT_ID is required'),
-  META_APP_SECRET: z.string().min(1, 'META_APP_SECRET is required'),
+// ── Env var schema (fallback when no clients.json exists) ──
+
+const envSchema = z.object({
+  META_ACCESS_TOKEN: z.string().min(1),
+  META_AD_ACCOUNT_ID: z.string().min(1),
+  META_APP_SECRET: z.string().min(1),
   META_PAGE_ID: z.string().optional(),
   META_PIXEL_ID: z.string().optional(),
   META_API_VERSION: z.string().default('v24.0'),
 });
 
-function loadConfig() {
-  const result = configSchema.safeParse(process.env);
+export type AppConfig = {
+  accessToken: string;
+  adAccountId: string;
+  appSecret: string;
+  pageId?: string;
+  pixelId?: string;
+  apiVersion: string;
+  graphBaseUrl: string;
+};
 
+function fromEnv(): AppConfig {
+  const result = envSchema.safeParse(process.env);
   if (!result.success) {
-    const errors = result.error.issues.map(i => `  - ${i.path}: ${i.message}`).join('\n');
-    throw new Error(`Missing required environment variables:\n${errors}`);
+    throw new Error(
+      'No active client account configured and no environment variables set.\n' +
+      'Use add_account to add a client, or set META_ACCESS_TOKEN / META_AD_ACCOUNT_ID / META_APP_SECRET in your environment.'
+    );
   }
-
   const cfg = result.data;
-
-  // Normalize ad account ID to include act_ prefix
   const adAccountId = cfg.META_AD_ACCOUNT_ID.startsWith('act_')
     ? cfg.META_AD_ACCOUNT_ID
     : `act_${cfg.META_AD_ACCOUNT_ID}`;
@@ -35,16 +46,19 @@ function loadConfig() {
     pixelId: cfg.META_PIXEL_ID,
     apiVersion: cfg.META_API_VERSION,
     graphBaseUrl: `https://graph.facebook.com/${cfg.META_API_VERSION}`,
-  } as const;
+  };
 }
 
-export type AppConfig = ReturnType<typeof loadConfig>;
-
-let _config: AppConfig | null = null;
+// ── Main export ──
+// Called lazily on every request — always returns the current active client.
 
 export function getConfig(): AppConfig {
-  if (!_config) {
-    _config = loadConfig();
+  const activeClient = getActiveClient();
+  if (activeClient) {
+    return {
+      ...activeClient,
+      graphBaseUrl: `https://graph.facebook.com/${activeClient.apiVersion}`,
+    };
   }
-  return _config;
+  return fromEnv();
 }

@@ -1,0 +1,1 @@
+Use the list_accounts tool to show all configured client accounts. Then ask the user which account they want to activate. Once they confirm their choice, call switch_account with the corresponding client_id. Finish by confirming the switch with the account name and ad account ID.
