@@ -111,7 +111,7 @@ async function uploadVideoResumable(
 
   const { upload_session_id, video_id } = startResponse;
   let startOffset = parseInt(startResponse.start_offset, 10);
-  const endOffset = parseInt(startResponse.end_offset, 10);
+  let endOffset = parseInt(startResponse.end_offset, 10);
 
   // Phase 2: Transfer chunks
   const fileBuffer = await readFile(filePath);
@@ -132,6 +132,7 @@ async function uploadVideoResumable(
     );
 
     startOffset = parseInt(transferResponse.start_offset, 10);
+    endOffset = parseInt(transferResponse.end_offset, 10);
   }
 
   // Phase 3: Finish

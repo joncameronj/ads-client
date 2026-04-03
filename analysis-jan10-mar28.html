@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Olympus Sub App Campaign Analysis | Jan 10 - Mar 28, 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0a0a; color: #e0e0e0; padding: 40px; }
+  h1 { font-size: 28px; color: #fff; margin-bottom: 8px; }
+  h2 { font-size: 22px; color: #fff; margin: 40px 0 16px; border-bottom: 1px solid #333; padding-bottom: 8px; }
+  h3 { font-size: 17px; color: #bbb; margin: 24px 0 12px; }
+  .subtitle { color: #888; font-size: 14px; margin-bottom: 32px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px; }
+  .card { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 20px; }
+  .card .label { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+  .card .value { font-size: 28px; font-weight: 700; color: #fff; margin-top: 4px; }
+  .card .sub { font-size: 12px; color: #666; margin-top: 4px; }
+  .card.red .value { color: #ff4444; }
+  .card.green .value { color: #44ff88; }
+  .card.yellow .value { color: #ffcc00; }
+  .card.blue .value { color: #4488ff; }
+  .chart-container { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 24px; margin-bottom: 24px; }
+  .chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+  @media (max-width: 800px) { .chart-row { grid-template-columns: 1fr; } }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+  th { text-align: left; padding: 10px 12px; background: #1a1a1a; color: #888; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #333; }
+  td { padding: 10px 12px; border-bottom: 1px solid #222; font-size: 13px; }
+  tr:hover td { background: #1a1a1a; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .tag-green { background: #1a3a1a; color: #44ff88; }
+  .tag-red { background: #3a1a1a; color: #ff4444; }
+  .tag-yellow { background: #3a3a1a; color: #ffcc00; }
+  .tag-blue { background: #1a1a3a; color: #4488ff; }
+  .copy-block { background: #111; border: 1px solid #333; border-radius: 8px; padding: 16px; margin-bottom: 12px; font-size: 13px; line-height: 1.6; }
+  .copy-block .hook { color: #ffcc00; font-weight: 600; font-size: 14px; }
+  .copy-block .headline { color: #4488ff; font-weight: 600; margin-top: 8px; }
+  .finding { background: #1a1a2a; border-left: 3px solid #4488ff; padding: 16px; margin-bottom: 12px; border-radius: 0 8px 8px 0; }
+  .finding strong { color: #fff; }
+  .section-divider { border: none; border-top: 2px solid #333; margin: 48px 0; }
+</style>
+</head>
+<body>
+
+<h1>Olympus Sub App Campaign Deep Dive</h1>
+<p class="subtitle">Campaign: "Olympus | Cold | ADV 25+ MF | Sub App | Landing Page | JAN012026" &mdash; Jan 10 to Mar 28, 2026 (78 days)</p>
+
+<!-- TOP-LEVEL METRICS -->
+<h2>1. Campaign Overview</h2>
+<div class="grid">
+  <div class="card red"><div class="label">Total Spend</div><div class="value">$10,195</div><div class="sub">~$130.71/day avg</div></div>
+  <div class="card blue"><div class="label">Impressions</div><div class="value">78,446</div><div class="sub">Reach: 23,560 unique</div></div>
+  <div class="card yellow"><div class="label">Clicks</div><div class="value">4,060</div><div class="sub">5.18% CTR</div></div>
+  <div class="card red"><div class="label">Leads</div><div class="value">1</div><div class="sub">CPL: $10,195</div></div>
+  <div class="card"><div class="label">CPC</div><div class="value">$2.51</div><div class="sub">CPM: $129.96</div></div>
+  <div class="card"><div class="label">Frequency</div><div class="value">3.33x</div><div class="sub">Avg times shown per person</div></div>
+  <div class="card red"><div class="label">Conversions</div><div class="value">1</div><div class="sub">0 purchases, 0 ROAS</div></div>
+  <div class="card yellow"><div class="label">Total Ads Tested</div><div class="value">69</div><div class="sub">23 unique creatives</div></div>
+</div>
+
+<!-- ALL CAMPAIGNS COMPARISON -->
+<h2>2. All Active Campaigns (Jan 10 - Mar 28)</h2>
+<div class="chart-row">
+  <div class="chart-container">
+    <canvas id="spendChart"></canvas>
+  </div>
+  <div class="chart-container">
+    <canvas id="metricsChart"></canvas>
+  </div>
+</div>
+
+<table>
+  <tr>
+    <th>Campaign</th><th>Objective</th><th>Spend</th><th>Impressions</th><th>Clicks</th><th>CTR</th><th>CPC</th><th>Leads</th><th>Reach</th>
+  </tr>
+  <tr>
+    <td><strong>Sub App (Landing Page)</strong></td><td><span class="tag tag-green">LEADS</span></td>
+    <td>$10,195</td><td>78,446</td><td>4,060</td><td>5.18%</td><td>$2.51</td><td>1</td><td>23,560</td>
+  </tr>
+  <tr>
+    <td>Video Views (Oly Vids)</td><td><span class="tag tag-blue">ENGAGEMENT</span></td>
+    <td>$2,200</td><td>190,817</td><td>436</td><td>0.23%</td><td>$5.05</td><td>0</td><td>82,802</td>
+  </tr>
+  <tr>
+    <td>Blogs (Cold+Warm+Hot)</td><td><span class="tag tag-blue">ENGAGEMENT</span></td>
+    <td>$881</td><td>46,864</td><td>1,210</td><td>2.58%</td><td>$0.73</td><td>0</td><td>27,124</td>
+  </tr>
+</table>
+
+<!-- AD SET BREAKDOWN -->
+<h2>3. Ad Set Performance Breakdown</h2>
+<div class="chart-container">
+  <canvas id="adsetChart"></canvas>
+</div>
+
+<table>
+  <tr><th>Ad Set</th><th>Spend</th><th>% of Budget</th><th>Impressions</th><th>Clicks</th><th>CTR</th><th>CPC</th><th>CPM</th><th>Leads</th><th>Freq</th></tr>
+  <tr>
+    <td><strong>Ad Set 1</strong> (...93030025)</td>
+    <td>$7,841</td><td><span class="tag tag-red">76.9%</span></td>
+    <td>62,485</td><td>3,305</td><td>5.29%</td><td>$2.37</td><td>$125.49</td><td>1</td><td>3.07x</td>
+  </tr>
+  <tr>
+    <td><strong>Ad Set 2</strong> (...03060025)</td>
+    <td>$1,915</td><td><span class="tag tag-yellow">18.8%</span></td>
+    <td>12,196</td><td>535</td><td>4.39%</td><td>$3.58</td><td>$156.99</td><td>0</td><td>2.38x</td>
+  </tr>
+  <tr>
+    <td><strong>Ad Set 3</strong> (...05150025)</td>
+    <td>$439</td><td><span class="tag tag-green">4.3%</span></td>
+    <td>3,765</td><td>220</td><td>5.84%</td><td>$1.99</td><td>$116.48</td><td>0</td><td>1.34x</td>
+  </tr>
+</table>
+
+<div class="finding">
+  <strong>Ad Set 3 is your best performer on efficiency.</strong> Lowest CPC ($1.99), lowest CPM ($116), highest CTR (5.84%), lowest frequency (1.34x). It's only gotten 4.3% of budget but delivers the best metrics. Consider shifting budget here.
+</div>
+<div class="finding">
+  <strong>Ad Set 1 has frequency fatigue.</strong> At 3.07x frequency with 76.9% of budget, the audience is seeing ads too often. This is likely driving up CPCs and killing conversion potential.
+</div>
+
+<!-- CREATIVE COPY ANALYSIS -->
+<h2>4. Opening 150 Characters: Common Factor Analysis</h2>
+<p style="color:#888; margin-bottom: 16px;">Analyzing the first ~150 characters of each unique primary text to identify hook patterns.</p>
+
+<div class="chart-container">
+  <canvas id="hookChart"></canvas>
+</div>
+
+<h3>Hook Pattern Categories</h3>
+<table>
+  <tr><th>Hook Type</th><th>Count</th><th>Ads Using It</th><th>Pattern</th></tr>
+  <tr>
+    <td><span class="tag tag-yellow">IDENTITY CALL-OUT</span></td><td>6</td>
+    <td>C4, C9, C18, C3, C23, C26</td>
+    <td>"If you're a practitioner who/doing..."</td>
+  </tr>
+  <tr>
+    <td><span class="tag tag-green">SARCASM / MOCKERY</span></td><td>4</td>
+    <td>C25, C6, C19, C22</td>
+    <td>Mocking agency promises or objections with alternating caps</td>
+  </tr>
+  <tr>
+    <td><span class="tag tag-blue">REVERSE PSYCHOLOGY</span></td><td>3</td>
+    <td>C28, C20, C10</td>
+    <td>"Don't buy this" / "Save your money" / "Here's how to not need us"</td>
+  </tr>
+  <tr>
+    <td><span class="tag tag-red">CONFESSION / STORY</span></td><td>3</td>
+    <td>C1, C15, C12</td>
+    <td>"I owe you an apology" / "Let me tell you about..." / Personal narrative</td>
+  </tr>
+  <tr>
+    <td><span class="tag tag-yellow">PAIN POINT AGITATION</span></td><td>3</td>
+    <td>C21, C24, C14</td>
+    <td>"Justifying, convincing, pleading..." / "Definition of insanity..."</td>
+  </tr>
+  <tr>
+    <td><span class="tag tag-blue">OPTION FRAMEWORK</span></td><td>2</td>
+    <td>C14, C5</td>
+    <td>"You've got three options..." / "You didn't become a practitioner to..."</td>
+  </tr>
+  <tr>
+    <td><span class="tag tag-green">PROVOCATIVE METAPHOR</span></td><td>2</td>
+    <td>C2, C19</td>
+    <td>"Is your marketing strategy... gambling?" / "Facebook ads don't work"</td>
+  </tr>
+</table>
+
+<h3>Opening Lines (First ~150 chars) by Creative</h3>
+
+<div class="copy-block">
+  <div class="hook">SARCASM: "We'll transform your practice in 30 days!" "We'll get you 34028238 patients or you don't pay!" "We'll take you to the moooooonnnnnn! GUARANTEED!"</div>
+  <div class="headline">Headline: 30 pAtIeNtS gUaRaNtEeD oR yOu DoNt PaY</div>
+  <div style="color:#888; font-size:11px; margin-top:4px;">Used by: NOTES C25, NOTES C6</div>
+</div>
+
+<div class="copy-block">
+  <div class="hook">REVERSE PSYCH: "If you're a practitioner who wants to create pre-sold patients yourself, here's how to not need Olympus. I'm serious. Save your money."</div>
+  <div class="headline">Headline: How We Create Presold Patients</div>
+  <div style="color:#888; font-size:11px; margin-top:4px;">Used by: PRESELL C28</div>
+</div>
+
+<div class="copy-block">
+  <div class="hook">IDENTITY: "If you're fighting the sickcare system, this is for you. You rejected Big Pharma's playbook. You don't manage symptoms. You find root causes."</div>
+  <div class="headline">Headline: Olympus: For The Practitioners Fighting Sickcare</div>
+  <div style="color:#888; font-size:11px; margin-top:4px;">Used by: CONMAN C4</div>
+</div>
+
+<div class="copy-block">
+  <div class="hook">PAIN POINT: "Justifying, convincing, pleading... even trying to "sell" patients on investing in their health? STOP IT... stop the madness..."</div>
+  <div class="headline">Headline: Install Patient Acquisition That Runs Itself</div>
+  <div style="color:#888; font-size:11px; margin-top:4px;">Used by: BEN C21, BIRDBOX V3 C21</div>
+</div>
+
+<div class="copy-block">
+  <div class="hook">DATA LEAD: "If you're a practitioner wondering why your leads don't convert, here's something most agencies won't tell you: It used to take 7 hours with 11 touches..."</div>
+  <div class="headline">Headline: Your patient leads don't suck. They're just not ready yet.</div>
+  <div style="color:#888; font-size:11px; margin-top:4px;">Used by: STEVE C9</div>
+</div>
+
+<div class="copy-block">
+  <div class="hook">CONFESSION: "If you're a healthcare practitioner, I owe you an apology. I built one of those agencies. And we were actually pretty damn good at what we did."</div>
+  <div class="headline">Headline: Confessions from 7-Fig Healthcare Marketer</div>
+  <div style="color:#888; font-size:11px; margin-top:4px;">Used by: SCREWED LIGHT C1</div>
+</div>
+
+<div class="copy-block">
+  <div class="hook">IDENTITY + PROVOCATION: "FOR PRACTITIONERS FIGHTING SICKCARE: Ever notice how they admit 'we don't know what causes it' but somehow know exactly what pill to prescribe?"</div>
+  <div class="headline">Headline: Install Patient Acquisition That Runs Itself</div>
+  <div style="color:#888; font-size:11px; margin-top:4px;">Used by: ARE YOU A REAL DOCTOR V1 C23</div>
+</div>
+
+<div class="copy-block">
+  <div class="hook">INCOME QUALIFIER: "If you're a practitioner doing $5K, $10K, $20K+ care plans and your leads keep asking 'do you take insurance?', your marketing is broken."</div>
+  <div class="headline">Headline: Install Patient Acquisition That Runs Itself</div>
+  <div style="color:#888; font-size:11px; margin-top:4px;">Used by: BIRDBOX V3 C18</div>
+</div>
+
+<div class="copy-block">
+  <div class="hook">METAPHOR: "If you're a practitioner trying to get more patients, let me ask you something: Is your marketing strategy... gambling?"</div>
+  <div class="headline">Headline: For Docs Who Feel Casinos Are Better ROI</div>
+  <div style="color:#888; font-size:11px; margin-top:4px;">Used by: GAMBLING C2</div>
+</div>
+
+<div class="copy-block">
+  <div class="hook">FRAMEWORK: "If you're a practitioner trying to grow, you've got three options: Option 1: Hire an agency. Cost: $5K-$10K/month..."</div>
+  <div class="headline">Headline: Olympus: The Future of Patient Acquisition</div>
+  <div style="color:#888; font-size:11px; margin-top:4px;">Used by: RED PILL BLUE PILL C14</div>
+</div>
+
+<div class="copy-block">
+  <div class="hook">STORY: "I need to tell you about Dr. Sinan Gocmen. He was one of our agency clients. Came in through a referral. Excited. Ready to grow."</div>
+  <div class="headline">Headline: Confessions from 7-Fig Healthcare Marketer</div>
+  <div style="color:#888; font-size:11px; margin-top:4px;">Used by: SCREWED DARK C15</div>
+</div>
+
+<div class="copy-block">
+  <div class="hook">RELATABLE: "If you're a practitioner who's tried using AI for marketing, let me guess how it went: You opened ChatGPT. Or Claude."</div>
+  <div class="headline">Headline: Patient Acquisition Done WITHOUT You?</div>
+  <div style="color:#888; font-size:11px; margin-top:4px;">Used by: GROWTH ON AUTOPILOT C10</div>
+</div>
+
+<div class="copy-block">
+  <div class="hook">EMPATHY: "You didn't become a practitioner to become a marketer. You didn't master root-cause care to spend your nights learning Facebook ads."</div>
+  <div class="headline">Headline: Install Patient Acquisition That Runs Itself</div>
+  <div style="color:#888; font-size:11px; margin-top:4px;">Used by: REPLACE YOUR AGENCY C5 (TOP SPENDER)</div>
+</div>
+
+<div class="copy-block">
+  <div class="hook">URGENCY/FOMO: "Docs watching agencies fail over and over: Definition of insanity is... well, you know the rest lol. While you're 'doing more research'..."</div>
+  <div class="headline">Headline: Install Patient Acquisition That Runs Itself</div>
+  <div style="color:#888; font-size:11px; margin-top:4px;">Used by: ARE YOU A REAL DOCTOR V1 C24</div>
+</div>
+
+<div class="copy-block">
+  <div class="hook">ANALOGY: "Remember when Steve Jobs announced the iPhone? Phones went from having keys to having screens. From making calls to running your entire life."</div>
+  <div class="headline">Headline: Olympus: The Future of Patient Acquisition</div>
+  <div style="color:#888; font-size:11px; margin-top:4px;">Used by: REPLACE YOUR AGENCY C12</div>
+</div>
+
+<!-- HEADLINE ANALYSIS -->
+<h2>5. Headline Common Factor Analysis</h2>
+<div class="chart-container">
+  <canvas id="headlineChart"></canvas>
+</div>
+
+<table>
+  <tr><th>Headline</th><th># Ads Using</th><th>Type</th></tr>
+  <tr><td><strong>"Install Patient Acquisition That Runs Itself"</strong></td><td>5</td><td><span class="tag tag-green">BENEFIT / OUTCOME</span></td></tr>
+  <tr><td>"Olympus: The Future of Patient Acquisition"</td><td>3</td><td><span class="tag tag-blue">BRAND / FUTURE</span></td></tr>
+  <tr><td>"30 pAtIeNtS gUaRaNtEeD oR yOu DoNt PaY"</td><td>2</td><td><span class="tag tag-yellow">SARCASM / MOCKERY</span></td></tr>
+  <tr><td>"Confessions from 7-Fig Healthcare Marketer"</td><td>2</td><td><span class="tag tag-red">CONFESSION / STORY</span></td></tr>
+  <tr><td>"How We Create Presold Patients"</td><td>1</td><td><span class="tag tag-green">HOW-TO / OUTCOME</span></td></tr>
+  <tr><td>"For The Practitioners Fighting Sickcare"</td><td>1</td><td><span class="tag tag-yellow">IDENTITY</span></td></tr>
+  <tr><td>"Your patient leads don't suck..."</td><td>1</td><td><span class="tag tag-blue">REFRAME</span></td></tr>
+  <tr><td>"For Docs Who Feel Casinos Are Better ROI"</td><td>1</td><td><span class="tag tag-yellow">PROVOCATIVE</span></td></tr>
+  <tr><td>"Why Agencies Fail Practitioners"</td><td>1</td><td><span class="tag tag-red">EXPLANATION</span></td></tr>
+  <tr><td>"Patient Acquisition Done WITHOUT You?"</td><td>1</td><td><span class="tag tag-green">QUESTION / OUTCOME</span></td></tr>
+  <tr><td>"Please DON'T BUY Our Practice Scaling Software"</td><td>1</td><td><span class="tag tag-yellow">REVERSE PSYCH</span></td></tr>
+  <tr><td>"Facebook aDs DoNt WoRk FoR mY pRaCtIcE"</td><td>1</td><td><span class="tag tag-yellow">SARCASM</span></td></tr>
+  <tr><td>"Stop treating marketing like sickcare"</td><td>1</td><td><span class="tag tag-red">COMMAND</span></td></tr>
+</table>
+
+<!-- CREATIVE IMAGE ANALYSIS -->
+<h2>6. Creative Image Analysis</h2>
+<p style="color:#888; margin-bottom: 16px;">All ads are link/image format. Here are the unique images used across 23 creatives:</p>
+
+<div class="chart-container">
+  <canvas id="imageChart"></canvas>
+</div>
+
+<table>
+  <tr><th>Image Hash (short)</th><th># Creatives</th><th>Used By</th><th>Format</th></tr>
+  <tr><td>9108574d...</td><td>2</td><td>REPLACE YOUR AGENCY C5, C12</td><td>PNG</td></tr>
+  <tr><td>88f14d09...</td><td>2</td><td>CONMAN C4, CONMAN C26</td><td>JPG</td></tr>
+  <tr><td>6038e139...</td><td>2</td><td>ARE YOU A REAL DOCTOR C23, C24</td><td>JPG</td></tr>
+  <tr><td>683d5375...</td><td>2</td><td>BIRDBOX V3 C18, C21</td><td>JPG</td></tr>
+  <tr><td>2334b282...</td><td>2</td><td>NOTES C25, C6</td><td>PNG</td></tr>
+  <tr><td colspan="4" style="color:#666;">+ 12 unique images used by 1 creative each</td></tr>
+</table>
+
+<div class="finding">
+  <strong>All 23 creatives are static images (link/image).</strong> Zero video creatives in the Sub App campaign. The Video Views campaign runs separately. Consider testing video creatives in the Sub App campaign for landing page views - video typically drives higher engagement and trust for complex offers.
+</div>
+
+<hr class="section-divider">
+
+<!-- KEY FINDINGS -->
+<h2>7. Key Findings & Recommendations</h2>
+
+<div class="finding">
+  <strong>CRITICAL: 1 lead from $10,195 spend.</strong> The conversion tracking or landing page funnel is severely broken. 4,060 clicks at 5.18% CTR means the ads are working - people ARE clicking. The breakdown is happening post-click. Either: (a) the pixel/event isn't firing, (b) the landing page isn't converting, or (c) the "Submit Application" event isn't being tracked properly.
+</div>
+
+<div class="finding">
+  <strong>The ads themselves are performing well.</strong> 5.18% CTR at $2.51 CPC for a cold LEADS campaign is solid. The creative copy is engaging people. The problem is downstream, not in the ads.
+</div>
+
+<div class="finding">
+  <strong>Hook patterns that dominate: "If you're a practitioner..."</strong> 6 out of 23 creatives open with identity-based hooks. This is the most common pattern and it's working (5.18% overall CTR). The sarcasm/mockery hooks (alternating caps) are the second most common and create pattern interrupts.
+</div>
+
+<div class="finding">
+  <strong>"Install Patient Acquisition That Runs Itself" is the most-used headline</strong> appearing in 5 creatives. It's the clearest benefit statement. However, headline diversity is actually quite good across the set - no single headline dominates too heavily.
+</div>
+
+<div class="finding">
+  <strong>All creatives are static images.</strong> No video. For a complex SaaS offer targeting practitioners, video would likely outperform. The Video Views campaign is running separately ($2,200 spend, 190K impressions) but isn't connected to the Sub App conversion funnel.
+</div>
+
+<div class="finding">
+  <strong>Frequency is too high on Ad Set 1 (3.07x).</strong> Audience saturation is a real risk. 76.9% of budget going to one ad set that's already at 3x frequency. Rotate budget to Ad Set 3 which has the best efficiency metrics and lowest frequency (1.34x).
+</div>
+
+<div class="finding">
+  <strong>Common copy DNA across all 23 creatives:</strong><br>
+  - All reference "7 AI employees" or "specialized AI agents"<br>
+  - All mention "$41M in results" or "250+ calls with practitioners"<br>
+  - All position against agencies ($5K-$10K/month retainers)<br>
+  - All use "sickcare" as the enemy frame<br>
+  - All end with "JonCameron" signature<br>
+  - All link to olympus.etho.net<br>
+  - All use LEARN_MORE CTA
+</div>
+
+<script>
+// Spend by Campaign
+new Chart(document.getElementById('spendChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Sub App ($10,195)', 'Video Views ($2,200)', 'Blogs ($881)'],
+    datasets: [{ data: [10195, 2200, 881], backgroundColor: ['#ff4444', '#4488ff', '#44ff88'], borderWidth: 0 }]
+  },
+  options: {
+    responsive: true,
+    plugins: { title: { display: true, text: 'Spend by Campaign (Jan 10 - Mar 28)', color: '#fff' }, legend: { labels: { color: '#ccc' } } }
+  }
+});
+
+// Metrics Comparison
+new Chart(document.getElementById('metricsChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Sub App', 'Video Views', 'Blogs'],
+    datasets: [
+      { label: 'CTR %', data: [5.18, 0.23, 2.58], backgroundColor: '#ffcc00' },
+      { label: 'CPC $', data: [2.51, 5.05, 0.73], backgroundColor: '#4488ff' }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { title: { display: true, text: 'CTR & CPC by Campaign', color: '#fff' }, legend: { labels: { color: '#ccc' } } },
+    scales: { x: { ticks: { color: '#888' } }, y: { ticks: { color: '#888' } } }
+  }
+});
+
+// Ad Set Breakdown
+new Chart(document.getElementById('adsetChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Ad Set 1', 'Ad Set 2', 'Ad Set 3'],
+    datasets: [
+      { label: 'Spend $', data: [7841, 1915, 439], backgroundColor: '#ff4444', yAxisID: 'y' },
+      { label: 'CTR %', data: [5.29, 4.39, 5.84], backgroundColor: '#44ff88', yAxisID: 'y1' },
+      { label: 'CPC $', data: [2.37, 3.58, 1.99], backgroundColor: '#4488ff', yAxisID: 'y1' }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { title: { display: true, text: 'Ad Set Performance Comparison', color: '#fff' }, legend: { labels: { color: '#ccc' } } },
+    scales: {
+      x: { ticks: { color: '#888' } },
+      y: { type: 'linear', position: 'left', ticks: { color: '#ff4444' }, title: { display: true, text: 'Spend ($)', color: '#ff4444' } },
+      y1: { type: 'linear', position: 'right', ticks: { color: '#44ff88' }, title: { display: true, text: 'CTR (%) / CPC ($)', color: '#44ff88' }, grid: { drawOnChartArea: false } }
+    }
+  }
+});
+
+// Hook Pattern Chart
+new Chart(document.getElementById('hookChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Identity Call-out', 'Sarcasm/Mockery', 'Reverse Psychology', 'Confession/Story', 'Pain Agitation', 'Option Framework', 'Provocative Metaphor'],
+    datasets: [{ label: '# of Creatives', data: [6, 4, 3, 3, 3, 2, 2], backgroundColor: ['#ffcc00', '#44ff88', '#4488ff', '#ff4444', '#ff8844', '#88ff44', '#ff44ff'] }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: { title: { display: true, text: 'Hook Pattern Distribution (First 150 chars)', color: '#fff' }, legend: { display: false } },
+    scales: { x: { ticks: { color: '#888' } }, y: { ticks: { color: '#ccc' } } }
+  }
+});
+
+// Headline Chart
+new Chart(document.getElementById('headlineChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Install Patient Acquisition...', 'Future of Patient Acquisition', '30 pAtIeNtS gUaRaNtEeD...', 'Confessions from 7-Fig...', 'All Others (1 each)'],
+    datasets: [{ label: '# of Creatives', data: [5, 3, 2, 2, 11], backgroundColor: ['#44ff88', '#4488ff', '#ffcc00', '#ff4444', '#666'] }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: { title: { display: true, text: 'Headline Usage Frequency', color: '#fff' }, legend: { display: false } },
+    scales: { x: { ticks: { color: '#888' } }, y: { ticks: { color: '#ccc' } } }
+  }
+});
+
+// Image Reuse Chart
+new Chart(document.getElementById('imageChart'), {
+  type: 'pie',
+  data: {
+    labels: ['Shared across 2+ creatives (5 images)', 'Unique to 1 creative (12 images)'],
+    datasets: [{ data: [10, 12], backgroundColor: ['#4488ff', '#333'], borderWidth: 0 }]
+  },
+  options: {
+    responsive: true,
+    plugins: { title: { display: true, text: 'Image Reuse Across Creatives', color: '#fff' }, legend: { labels: { color: '#ccc' } } }
+  }
+});
+</script>
+
+</body>
+</html>

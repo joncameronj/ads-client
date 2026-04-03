@@ -216,6 +216,19 @@ export function registerCreativeTools(server: McpServer) {
       let objectStorySpec: Record<string, unknown>;
 
       if (video_id) {
+        // Fetch preferred thumbnail from Meta
+        let thumbnailUrl: string | undefined;
+        try {
+          const thumbResponse = await metaApiRequest<{ thumbnails?: { data?: Array<{ uri: string; is_preferred: boolean }> } }>(
+            video_id,
+            { params: { fields: 'thumbnails' } }
+          );
+          const preferred = thumbResponse.thumbnails?.data?.find(t => t.is_preferred);
+          thumbnailUrl = preferred?.uri || thumbResponse.thumbnails?.data?.[0]?.uri;
+        } catch {
+          // Thumbnail fetch failed — will try without it
+        }
+
         objectStorySpec = {
           page_id: resolvedPageId,
           video_data: {
@@ -223,6 +236,7 @@ export function registerCreativeTools(server: McpServer) {
             message: primary_text,
             title: headline,
             link_description: description || headline,
+            ...(thumbnailUrl && { image_url: thumbnailUrl }),
             call_to_action: {
               type: call_to_action,
               value: { link: link_url },
