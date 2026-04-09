@@ -40,7 +40,7 @@ export function registerAdSetTools(server: McpServer) {
       lifetime_budget: z.number().positive().optional().describe('Lifetime budget in dollars'),
       optimization_goal: z.enum([
         'LINK_CLICKS', 'LANDING_PAGE_VIEWS', 'IMPRESSIONS', 'REACH',
-        'LEAD_GENERATION', 'OFFSITE_CONVERSIONS', 'VALUE',
+        'LEAD_GENERATION', 'OFFSITE_CONVERSIONS', 'VALUE', 'POST_ENGAGEMENT',
       ]).describe('What to optimize for'),
       bid_strategy: z.enum(['LOWEST_COST_WITHOUT_CAP', 'COST_CAP', 'BID_CAP']).default('LOWEST_COST_WITHOUT_CAP').describe('Bid strategy'),
       bid_amount: z.number().positive().optional().describe('Bid cap amount in dollars (required for COST_CAP / BID_CAP)'),
@@ -96,7 +96,7 @@ export function registerAdSetTools(server: McpServer) {
       if (end_time) body.end_time = end_time;
 
       if (resolvedPageId) {
-        body.promoted_object = optimization_goal === 'LEAD_GENERATION'
+        body.promoted_object = (optimization_goal === 'LEAD_GENERATION' || optimization_goal === 'POST_ENGAGEMENT')
           ? { page_id: resolvedPageId }
           : resolvedPixelId
             ? { pixel_id: resolvedPixelId, custom_event_type: custom_event_type || 'LEAD' }

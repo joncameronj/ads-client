@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { metaApiRequest, getAdAccountId } from '../meta/client.js';
+import { metaApiRequest, getAdAccountId, MetaApiError } from '../meta/client.js';
 import type { MetaAdSet, MetaPagedResponse } from '../meta/types.js';
 
 export function registerCampaignTools(server: McpServer) {
@@ -16,37 +16,49 @@ export function registerCampaignTools(server: McpServer) {
       ]).describe('Campaign objective'),
       special_ad_categories: z.array(z.string()).default([]).describe('Special ad categories (e.g., HOUSING, EMPLOYMENT, CREDIT)'),
       buying_type: z.enum(['AUCTION', 'RESERVED']).default('AUCTION').describe('Buying type'),
+      is_adset_budget_sharing_enabled: z.boolean().default(false).describe('Allow ad sets to share up to 20% of budget for performance optimization (required by Meta API v24+)'),
     },
-    async ({ name, objective, special_ad_categories, buying_type }) => {
+    async ({ name, objective, special_ad_categories, buying_type, is_adset_budget_sharing_enabled }) => {
       const accountId = getAdAccountId();
 
-      const response = await metaApiRequest<{ id: string }>(
-        `${accountId}/campaigns`,
-        {
-          method: 'POST',
-          body: {
-            name,
-            objective,
-            status: 'PAUSED',
-            special_ad_categories,
-            buying_type,
-          },
-        }
-      );
+      try {
+        const response = await metaApiRequest<{ id: string }>(
+          `${accountId}/campaigns`,
+          {
+            method: 'POST',
+            body: {
+              name,
+              objective,
+              status: 'PAUSED',
+              special_ad_categories,
+              buying_type,
+              is_adset_budget_sharing_enabled,
+            },
+          }
+        );
 
-      return {
-        content: [{
-          type: 'text' as const,
-          text: JSON.stringify({
-            success: true,
-            campaign_id: response.id,
-            name,
-            objective,
-            status: 'PAUSED',
-            message: 'Campaign created in PAUSED status. Create ad sets with create_adset, then activate with update_campaign_status.',
-          }, null, 2),
-        }],
-      };
+        return {
+          content: [{
+            type: 'text' as const,
+            text: JSON.stringify({
+              success: true,
+              campaign_id: response.id,
+              name,
+              objective,
+              status: 'PAUSED',
+              message: 'Campaign created in PAUSED status. Create ad sets with create_adset, then activate with update_campaign_status.',
+            }, null, 2),
+          }],
+        };
+      } catch (error) {
+        const detail = error instanceof MetaApiError
+          ? { message: error.message, code: error.errorCode, subcode: error.errorSubcode, user_title: error.errorUserTitle, user_msg: error.errorUserMsg, trace: error.fbtraceId }
+          : { message: error instanceof Error ? error.message : 'Unknown error' };
+        return {
+          content: [{ type: 'text' as const, text: JSON.stringify({ error: true, ...detail }, null, 2) }],
+          isError: true,
+        };
+      }
     }
   );
 
