@@ -1,5 +1,13 @@
 # ads-client — Meta Ads MCP Server
 
+## Session start — pull latest
+
+This repo is shared across machines and evolves frequently. At the start of every session, remind the user to update:
+
+> This codebase is frequently updated. Run `git pull` before starting work to get the latest tools, slash commands, and fixes. If new dependencies landed, also run `npm install`.
+
+Surface that reminder before taking any non-trivial action so teammates do not work against stale MCP tools.
+
 ## Overview
 
 Standalone MCP server for managing Meta (Facebook/Instagram) ads from Claude Code CLI. Uses system user token to talk directly to Meta Marketing API.

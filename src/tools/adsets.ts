@@ -48,7 +48,7 @@ export function registerAdSetTools(server: McpServer) {
       placements: placementsSchema,
       page_id: z.string().optional().describe('Facebook Page ID (uses default if omitted)'),
       pixel_id: z.string().optional().describe('Pixel ID for conversion tracking'),
-      custom_event_type: z.enum(['LEAD', 'SUBMIT_APPLICATION', 'PURCHASE', 'COMPLETE_REGISTRATION', 'SUBSCRIBE', 'CONTACT', 'ADD_TO_CART', 'INITIATED_CHECKOUT']).default('LEAD').describe('Conversion event type for pixel-based optimization'),
+      custom_event_type: z.enum(['LEAD', 'SUBMIT_APPLICATION', 'PURCHASE', 'COMPLETE_REGISTRATION', 'SUBSCRIBE', 'CONTACT', 'ADD_TO_CART', 'INITIATED_CHECKOUT', 'SCHEDULE']).default('LEAD').describe('Conversion event type for pixel-based optimization'),
       start_time: z.string().optional().describe('Start time (ISO 8601)'),
       end_time: z.string().optional().describe('End time (ISO 8601, required for lifetime budget)'),
       temperature: z.enum(['COLD', 'WARM', 'HOT']).optional().describe('Temperature tag for funnel organization'),
